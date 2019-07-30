@@ -3,9 +3,9 @@
     width: 100%;
     background-color: #ededed;
     text-align: center;
-    font-size: 24PX;
-    height: 60PX;
-    line-height: 60PX;
+    font-size: 48px;
+    height: 120px;
+    line-height: 120px;
   }
   .question-button {
     position: fixed;
@@ -15,5 +15,40 @@
     border-radius: 0;
     color: #ffffff;
     background: cadetblue;
+  }
+  .question-list {
+    margin-top: 20px;
+    font-size: 30px;
+    .question-cell {
+      margin: 40px 0;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .question-text {
+        width: 100%;
+
+        .question-title {
+          font-size: 42px;
+          font-family: PingFangSC-Medium;
+        }
+        .question-desc {
+          margin-top: 20px;
+        }
+      }
+
+      .question-vote {
+        width: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .vote-img {
+          width: 32px;
+          height: 32px;
+          margin: 0 20px;
+        }
+      }
+    }
   }
 }
