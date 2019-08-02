@@ -21,6 +21,12 @@ function setStore(key, obj) {
   Taro.setStorageSync(key, string);
 }
 
+// 之前存入的数组没有 id，重新在这里构造一下，只运行一次
+// let arr = getStore('questions').map(item => {
+//   return { id: parseInt(Math.random() * 10000), ...item };
+// });
+// setStore('questions', arr);
+
 export default class Index extends Component {
   config = {
     navigationBarTitleText: '首页'
@@ -51,7 +57,7 @@ export default class Index extends Component {
 
   receiveQuestion(options) {
     let { questionList } = this.state;
-    questionList.push(options);
+    questionList.push({ id: parseInt(Math.random() * 10000), ...options });
     this.setState({ questionList: questionList }, () => {
       console.log(this.state.questionList);
       setStore('questions', this.state.questionList);
@@ -74,8 +80,14 @@ export default class Index extends Component {
 
                 <View className='question-vote'>
                   <Image className='vote-img' src={Wrong} />
-                  <Text className='vote-count'>1</Text>
-                  <Image className='vote-img' src={Right} />
+                  <Text className='vote-count'>
+                    {item.vote ? item.vote : 0}
+                  </Text>
+                  <Image
+                    className='vote-img'
+                    onClick={this.vote.bind(this, item)}
+                    src={Right}
+                  />
                 </View>
               </View>
             );
