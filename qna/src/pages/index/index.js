@@ -65,12 +65,50 @@ export default class Index extends Component {
     this.cancelQuestion();
   }
 
+  vote(item) {
+    let { questionList } = this.state;
+    if (item) {
+      item.vote = item.vote ? item.vote + 1 : 1;
+    }
+    let newList = questionList.map(itemQuestion => {
+      if (itemQuestion.id == item.id) {
+        itemQuestion = { ...item };
+      }
+      return itemQuestion;
+    });
+
+    // setState 才会触发页面更新，只修改数组不会使页面更新
+    this.setState({ questionList: newList }, () => {
+      setStore('questions', this.state.questionList);
+    });
+  }
+
+  reverseVote(item) {
+    let { questionList } = this.state;
+    if (item) {
+      item.vote = item.vote ? (item.vote - 1 >= 0 ? item.vote - 1 : 0) : 0;
+    }
+    let newList = questionList.map(itemQuestion => {
+      if (itemQuestion.id == item.id) {
+        itemQuestion = { ...item };
+      }
+      return itemQuestion;
+    });
+
+    // setState 才会触发页面更新，只修改数组不会使页面更新
+    this.setState({ questionList: newList }, () => {
+      setStore('questions', this.state.questionList);
+    });
+  }
+
   render() {
+    let { questionList } = this.state;
+    let sortedList = questionList.sort((a, b) => a.vote < b.vote);
     return (
       <View className='index'>
         <View className='title'>Question & Answers</View>
         <View className='question-list'>
-          {this.state.questionList.map((item, index) => {
+          {sortedList.map((item, index) => {
             return (
               <View className='question-cell' key={index}>
                 <View className='question-text'>
@@ -79,7 +117,11 @@ export default class Index extends Component {
                 </View>
 
                 <View className='question-vote'>
-                  <Image className='vote-img' src={Wrong} />
+                  <Image
+                    className='vote-img'
+                    onClick={this.reverseVote.bind(this, item)}
+                    src={Wrong}
+                  />
                   <Text className='vote-count'>
                     {item.vote ? item.vote : 0}
                   </Text>
